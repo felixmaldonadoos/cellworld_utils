@@ -64,5 +64,21 @@ In order to set up a Static IP Address, start by going to the Windows settings
    2. Subnet prefix length should be 24 (bits)
    3. Gateway is the same address as the default gateway (129.105.69.1 or 129.105.49.1)?
 
+## Step-Up Module
+There does not exist a proprietary cable that connects the HP Reverb G2 VR backpack to the HP Reverb G2 Headset, so I made my own! This DC to DC converter takes 12V from the backpack and steps it up to 19.5V and goes into the headset. This allows the backpack and headset to be untethered from a power supply. 
+
 ### Step-Up Module Bill of Materials
+Here is the Bill of Materials as well as pictures depicting how the step-up module is assembled. Not depicted are the spacers and screws necessary, as well as the DC-DC step-up converter itself. 
+
+Lastly is the fully assembled Step-Up Module
+
 [Step-Up Module BoM](https://docs.google.com/spreadsheets/d/1b9FdkY2aQWLmUtxk2oAGR2HAnpVTHtHQpYreBFGOhEA/edit?usp=sharing)
+
+#### Assembly of the Step-Up Module
+![Assembly of the Step-Up Module](images/assembly_1.jpg)
+
+#### Assembly with Numbered Parts
+![Assembly with numbered parts](images/assembly_2.jpg)
+
+#### Fully Assembled Step-Up Module
+![Fully Assembled Module](images/full_assembly.jpg)
