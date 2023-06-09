@@ -10,7 +10,7 @@ These are the steps you need to follow in order to run the Experiment in Unreal 
 1. Begin by cloning the [Experiments](https://github.com/germanespinosa/Experiment) Repo
 2. Open up the containing folder and right-click on Experiment.uproject
 3. You should see an option to "Generate Visual Studio Project Files"
-   1. ![Generate Project Files](genproj.png)
+   1. ![Generate Project Files](images/genproj.png)
 4. Once this completes, open up **Experiment.sln** in Visual Studio 
 
 ### Configuration Settings
@@ -18,12 +18,12 @@ Let's make sure we have the correct Configuration Settings, which will let us co
 build and compile the code so that we can edit the game!
 1. At the top of the Visual Studio IDE, open up the Configuration Manager by click on the drop-down menu
 next to the "Local Windows Debugger" play button
-   1. ![Configuration Manager](configmanager.png)
+   1. ![Configuration Manager](images/configmanager.png)
 2. Match your settings to the following:
-   1. ![Configuration Settings in the Configuration Manager](configsettings.png)
+   1. ![Configuration Settings in the Configuration Manager](images/configsettings.png)
    2. Also, set **Experiment** as the Startup Project, you can do this by right-clicking on Experiment 
    in the solution explorer and navigating down to "Set as Startup Project"
-   3. ![Startup Project](startupproj.png)
+   3. ![Startup Project](images/startupproj.png)
 3. You should then be able to start Unreal Engine's Game Editor
 
 
@@ -41,12 +41,12 @@ exists locally under: `/mnt/c/Research/...`
 2. You may need to **Reload CMake Projects** or Rebuild it
 3. Under **File -> Settings**
 4. Under **Build, Execution, Deployment -> Toolchains**
-5. ![Toolchain Settings](clionbed.png)
+5. ![Toolchain Settings](images/clionbed.png)
 6. ***It is Imperative that the WSL here is WSL2*** 
    1. To check your version, open up Windows Powershell and run `wsl -l -v`
    2. It should output: **Ubuntu-22.04 Version 2**
 7. In the top right, you should now be able to run the script `vr_server`. 
-8. ![VR Service Script](vrsrvscript.png)
+8. ![VR Service Script](images/vrsrvscript.png)
 9. At this point the vr_server 
 
 ### Adding in the Occlusions
