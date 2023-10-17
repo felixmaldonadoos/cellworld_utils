@@ -64,6 +64,25 @@ In order to set up a Static IP Address, start by going to the Windows settings
    2. Subnet prefix length should be 24 (bits)
    3. Gateway is the same address as the default gateway (129.105.69.1 or 129.105.49.1)?
 
+## Setting up OpenVPN
+Connections can be done in one of three ways. First, we can use an ethernet cable to directly connect between two computers to communicate.
+This, of course, is not feasible since communication is going to be done on two different parts of campus, and will be done using a moving subject.
+The next is communication through our own routers, which requires the use of an open port. That involves getting IT involved. The final solution is a VPN, 
+which can be running through anything - for example Northwestern's VPN. In this case I used OpenVPN from AWS, which is not a good idea but at least I know how to use it now.
+Here's how to use it...
+1. Start the Instance on the AWS Website.
+   1. Make sure to click on the Elastic IP Address on each PC you want to connect it to
+2. On a Linux Machine install via [these](https://openvpn.net/openvpn-client-for-linux/) instructions. 
+   1. If you're using Windows, there's an easy to use GUI that it comes with
+3. Download the `user_profile` after connecting to the IP Address listed.
+4. Import the Configuration file
+   1. `openvpn3 config-import --config <profile.ovpn>`
+   2. Confirm you did it correctly with `openvpn3 configs-list`
+   3. Start a session using `openvpn3 session-start --config <profile.ovpn>`
+      1. You will need to enter in your username and password
+   4. View current sessions using `openvpn3 sessions-list`
+   5. End the session using `openvpn3 session-manage --config <profile.ovpn> --disconnect`
+
 ## Step-Up Module
 There does not exist a proprietary cable that connects the HP Reverb G2 VR backpack to the HP Reverb G2 Headset, so I made my own! This DC to DC converter takes 12V from the backpack and steps it up to 19.5V and goes into the headset. This allows the backpack and headset to be untethered from a power supply. 
 
