@@ -101,3 +101,14 @@ Lastly is the fully assembled Step-Up Module
 
 #### Fully Assembled Step-Up Module
 ![Fully Assembled Module](images/full_assembly.jpg)
+
+LAPTOP: 10.105.232.16
+PC: 
+
+Arena WAN: 129.105.249.94
+Arena: Given IP: 192.168.137.73
+Fixed IP: 192.168.137.151
+
+129.105.182.109
+
+Client Test - 

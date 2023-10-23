@@ -17,6 +17,9 @@ class MyService(tcp.MessageServer):
 
     #     return v + v2
 
+    
+    # @staticmethod
+    # @json_parameters_function()
     def test3(self, a, b, c):
         return a + b + c
 
@@ -48,3 +51,6 @@ service.join()
 # jo = JsonObject.load('{"v":1,"v2":3}')
 # print(service.accum(jo))
 
+
+# if client.connect("129.105.69.134", 9999):
+# if client.connect("192.168.137.228", 9999):
