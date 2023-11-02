@@ -1,5 +1,6 @@
 from json_cpp import *
 import tcp_messages as tcp
+from cellworld import Location
 
 class MyService(tcp.MessageServer):
 
@@ -10,12 +11,17 @@ class MyService(tcp.MessageServer):
         self.router.add_route("test2", self.test2, str)
         self.router.add_route("test3", self.test3)
         self.router.add_route("stop_please", self.stop_service)
+        self.router.add_route("set_destination", self.echo, JsonString)
 
     # @staticmethod
     # @json_parameters_function()
     # def accum(v: int, v2: int):
 
     #     return v + v2
+    def echo(self, msg):
+        print("Hi", msg)
+        # print(f"Destination {dest.x, dest.y}")
+
 
     
     # @staticmethod
@@ -44,7 +50,7 @@ service = MyService()
 
 service.on_new_connection = new_connection
 print ("starting")
-service.start(port=9999)
+service.start(port=4590)
 print ("started")
 
 service.join()

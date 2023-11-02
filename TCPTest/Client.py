@@ -15,8 +15,8 @@ if client.connect("129.105.249.94", 9000):
     #
     # print(client.send_request(tcp.Message(header="test2", body="hello")))
     # sleep(2)
-    # print("stopping")
-    # print(client.send_message(tcp.Message(header="stop_please")))
+    print("Client telling Server to Stop")
+    print(client.send_message("stop_server"))
     sleep(2)
     client.disconnect()
 else:
