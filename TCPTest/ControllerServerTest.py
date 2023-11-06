@@ -37,10 +37,10 @@ class MyService(tcp.MessageServer):
         print("test2", v)
         return 5
 
-    def send_broadcast(self):
-        print("Sending Broadcast Again")
+    def send_broadcast(self, loc):
+        print(f"Sending Broadcast Again {loc}")
         service.broadcast_subscribed(message=tcp.Message(header="prey_step", 
-                             body=Location(800.0, 200.0)))
+                             body=loc))
 
 def new_connection(self):
     print("new_connection")
@@ -53,9 +53,18 @@ print ("starting")
 service.start(port=5000)
 print ("started")
 sleep(10)
-for i in range (0,50):
-    service.send_broadcast()
-    sleep(2)
+locations = []
+locations.append(Location(0.0, 0.5))
+locations.append(Location(0.5, 0.5))
+locations.append(Location(0.5, 1.0))
+locations.append(Location(0.5, 0.0))
+locations.append(Location(0.5, 0.5))
+
+for i in range(0,5):
+    print(f"Broadcast: {i}")
+    service.send_broadcast(locations[i])
+    sleep(5)
+
 
 service.join()
 

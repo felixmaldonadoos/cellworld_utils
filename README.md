@@ -112,3 +112,5 @@ Fixed IP: 192.168.137.151
 129.105.182.109
 
 Client Test - 
+
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted
