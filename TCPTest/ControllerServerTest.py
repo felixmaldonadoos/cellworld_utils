@@ -65,8 +65,14 @@ for i in range(0,5):
     service.send_broadcast(locations[i])
     sleep(5)
 
+# print("Num Messages", len(service.messages))
+# if len(service.messages) != 0:
+#     for i in range(len(service.messages)):
+#         print(service.messages[i])
 
 service.join()
+
+
 
 # service.broadcast(message=tcp.Message(header="Hello", body="teehee"))
 

@@ -20,7 +20,7 @@ if client.connect("127.0.0.1", 5000):
     # print(client.send_request(tcp.Message(header="test2", body="hello")))
     print(client.messages)
     while(client.messages == []):
-        client.send_message(tcp.Message(header="send_again", body=""))
+        # client.send_message(tcp.Message(header="send_again", body=""))
         broadcast = client.messages.get_message(header="prey_step")
         if broadcast != None:
             print("Found Message")
