@@ -12,7 +12,7 @@ class MyService(tcp.MessageServer):
         self.router.add_route("test3", self.test3)
         self.router.add_route("stop_server", self.stop_service)
         self.router.add_route("set_destination", self.echo, JsonString)
-        self.router.add_route("send_again", self.send_broadcast)
+        # self.router.add_route("send_again", self.send_broadcast)
 
     # @staticmethod
     # @json_parameters_function()
@@ -20,7 +20,7 @@ class MyService(tcp.MessageServer):
 
     #     return v + v2
     def echo(self, msg):
-        print("Hi", msg)
+        print("Set Destination: ", msg)
         # print(f"Destination {dest.x, dest.y}")
     
     # @staticmethod
@@ -37,10 +37,14 @@ class MyService(tcp.MessageServer):
         print("test2", v)
         return 5
 
-    def send_broadcast(self, loc):
-        print(f"Sending Broadcast Again {loc}")
+    def send_broadcast_prey(self, loc):
+        print(f"Sending prey_step {loc}")
         service.broadcast_subscribed(message=tcp.Message(header="prey_step", 
                              body=loc))
+    
+    def send_broadcast_pred(self, loc):
+        print(f"Sending predator_step {loc}")
+        service.broadcast_subscribed(message=tcp.Message(header="predator_step", body=loc))
 
 def new_connection(self):
     print("new_connection")
@@ -50,35 +54,27 @@ service.allow_subscription = True
 
 service.on_new_connection = new_connection
 print ("starting")
-service.start(port=5000)
+service.start(port=6000)
 print ("started")
 sleep(10)
-locations = []
-locations.append(Location(0.0, 0.5))
-locations.append(Location(0.5, 0.5))
-locations.append(Location(0.5, 1.0))
-locations.append(Location(0.5, 0.0))
-locations.append(Location(0.5, 0.5))
+prey_locations = []
+prey_locations.append(Location(0.0, 0.5))
+prey_locations.append(Location(0.5, 0.5))
+prey_locations.append(Location(0.5, 1.0))
+prey_locations.append(Location(0.5, 0.0))
+prey_locations.append(Location(0.5, 0.5))
+
+predator_locations = []
+predator_locations.append(Location(1.0, 0.5))
+predator_locations.append(Location(0.0, 0.5))
+predator_locations.append(Location(0.5, 0.0))
+predator_locations.append(Location(0.5, 1.0))
+predator_locations.append(Location(1.0, 0.5))
 
 for i in range(0,5):
     print(f"Broadcast: {i}")
-    service.send_broadcast(locations[i])
+    service.send_broadcast_prey(prey_locations[i])
+    service.send_broadcast_pred(predator_locations[i])
     sleep(5)
-
-# print("Num Messages", len(service.messages))
-# if len(service.messages) != 0:
-#     for i in range(len(service.messages)):
-#         print(service.messages[i])
-
+    
 service.join()
-
-
-
-# service.broadcast(message=tcp.Message(header="Hello", body="teehee"))
-
-# jo = JsonObject.load('{"v":1,"v2":3}')
-# print(service.accum(jo))
-
-
-# if client.connect("129.105.69.134", 9999):
-# if client.connect("192.168.137.228", 9999):
