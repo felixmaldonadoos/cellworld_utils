@@ -1,13 +1,23 @@
 from json_cpp import *
 import tcp_messages as tcp
-from cellworld import Location
+from cellworld import Location, Step, Episode
 from time import sleep
 
+# --- Load an Experiment ---
+epi = Episode.load_from_file("PEEK_20230201_1340_FMM13_21_05_RT3_episode_000.json")
+traj_obj = epi.trajectories.split_by_agent()
+prey_traj = traj_obj['prey']
+# print(prey_traj)
+print(len(prey_traj))
+
+# for step in prey_traj:
+#     print(f"Step {step}")
+
+# --- Fake Server ---  
 class MyService(tcp.MessageServer):
 
     def __init__(self):
         tcp.MessageServer.__init__(self)
-        # self.router.add_route("accum", self.accum, JsonObject)
         self.router.add_route("test2", self.test2, str)
         self.router.add_route("test3", self.test3)
         self.router.add_route("stop_server", self.stop_service)
@@ -21,7 +31,6 @@ class MyService(tcp.MessageServer):
     #     return v + v2
     def echo(self, msg):
         print("Set Destination: ", msg)
-        # print(f"Destination {dest.x, dest.y}")
     
     # @staticmethod
     # @json_parameters_function()
@@ -37,14 +46,14 @@ class MyService(tcp.MessageServer):
         print("test2", v)
         return 5
 
-    def send_broadcast_prey(self, loc):
-        print(f"Sending prey_step {loc}")
+    def send_broadcast_prey(self, step):
+        print(f"Sending prey_step {step.location}")
         service.broadcast_subscribed(message=tcp.Message(header="prey_step", 
-                             body=loc))
+                             body=step))
     
-    def send_broadcast_pred(self, loc):
-        print(f"Sending predator_step {loc}")
-        service.broadcast_subscribed(message=tcp.Message(header="predator_step", body=loc))
+    def send_broadcast_pred(self, step):
+        print(f"Sending predator_step {step.location}")
+        service.broadcast_subscribed(message=tcp.Message(header="predator_step", body=step))
 
 def new_connection(self):
     print("new_connection")
@@ -57,24 +66,24 @@ print ("starting")
 service.start(port=6000)
 print ("started")
 sleep(10)
-prey_locations = []
-prey_locations.append(Location(0.0, 0.5))
-prey_locations.append(Location(0.5, 0.5))
-prey_locations.append(Location(0.5, 1.0))
-prey_locations.append(Location(0.5, 0.0))
-prey_locations.append(Location(0.5, 0.5))
+prey_steps = []
+prey_steps.append(Step(location = Location(0.0, 0.5)) )
+prey_steps.append(Step(location = Location(0.5, 0.5)) )
+prey_steps.append(Step(location = Location(0.5, 1.0)) )
+prey_steps.append(Step(location = Location(0.5, 0.0)) )
+prey_steps.append(Step(location = Location(0.5, 0.5)) )
 
-predator_locations = []
-predator_locations.append(Location(1.0, 0.5))
-predator_locations.append(Location(0.0, 0.5))
-predator_locations.append(Location(0.5, 0.0))
-predator_locations.append(Location(0.5, 1.0))
-predator_locations.append(Location(1.0, 0.5))
+predator_steps = []
+predator_steps.append(Step(location = Location(1.0, 0.5)) )
+predator_steps.append(Step(location = Location(0.0, 0.5)) )
+predator_steps.append(Step(location = Location(0.5, 0.0)) )
+predator_steps.append(Step(location = Location(0.5, 1.0)) )
+predator_steps.append(Step(location = Location(1.0, 0.5)) )
 
-for i in range(0,5):
+for i in range(0,len(prey_traj)):
     print(f"Broadcast: {i}")
-    service.send_broadcast_prey(prey_locations[i])
-    service.send_broadcast_pred(predator_locations[i])
-    sleep(5)
+    service.send_broadcast_prey(prey_traj[i])
+    # service.send_broadcast_pred(predator_steps[i])
+    sleep(0.01)
     
 service.join()
