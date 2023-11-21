@@ -1,30 +1,49 @@
 # MvP (Title WIP)
-Mouse Versus Predator
+![Mouse Versus Predator](images/mvp.png)
 
-[Brief Description of the Project]
 
-[Define Task That we Are Doing]
+### Project Overview
+[**It Controls a Robot in VR**]
+The purpose of this project is to create a method of controlling a robot through virtual-reality.  
 
+[**Planning Perspective**]
+This is to understand the dynamic between predator and prey for the purpose of understanding planning.
+
+[**Define Task That we Are Doing**]
+We chase around a mouse by controlling the robot in a virtual-reality environment. Can talk about how this is actually less of a challenge than doing so with a game controller. 
 <!-- ![Task Diagram](images/task_logic_sq.png) -->
 
 
 ## Robotics Control
 <div style="text-align: center;" markdown="1">
-<img src="images/robot_ctrl_2x.gif" alt="2x Speed of Robot Moving"/>
+   <img src="images/robot_ctrl_2x.gif" alt="2x Speed of Robot Moving"/>
 </div>
-[Here's the Robot, Designed by Gabrielle Wink and Dr. Angel Germán Espinosa Coarasa]
+&nbsp
 
-![Robot Breakdown](images/robot_sq.png)
+<div style="text-align: center;" markdown="1">
+   <img src="images/robot_sq.png" alt="Breakdown of the Robot"/>
+   <figcaption> The Skid Steer Drive Robot, designed by Gabrielle Wink and Dr. Angel Germán Espinosa Coarasa. Image Credits: Lai, et al. (2024). A robot-rodent interaction arena with adjustable spatial complexity for ethologically relevant behavioral studies. Cell Report
+</div>
+&nbsp
 
-Image Credits: Lai, et al. (2024). *A robot-rodent interaction arena with adjustable spatial complexity for ethologically relevant behavioral studies.* Cell Reports
-
-[How Does the Robot Move?]
-
-![Networking Diagram](images/robot_ctrl_diagram.PNG)
+<div style="text-align: center;" markdown="1">
+   <img src="images/robot_ctrl_diagram.PNG" alt="Breakdown of the Control of the Robot"/>
+   <figcaption> [How Does the Robot Move to a Destination?]
+</div>  
 
 [Explain How Giving a Set Destination Propogates into Giving Wheel Commands to a Skid Steer Drive Robot]
 
 ## Virtual-Reality
+<div style="text-align: center;" markdown="1">
+   <img src="images/virtual_arena.png" alt="The Virtual Arena"/>
+   <figcaption> Virtual Arena whooby dooby doo
+</div>
+&nbsp
+<div style="text-align: center;" markdown="1">
+   <img src="images/nav_mesh.png" alt="Navigation Mesh Area"/>
+   <figcaption> Despicts the area the real robot and mouse can move
+</div>
+&nbsp
 
 [Okay so the readers know what the task is, how are we doing it in VR?]
 
@@ -39,6 +58,8 @@ Image Credits: Lai, et al. (2024). *A robot-rodent interaction arena with adjust
 [TODO: Adding in Occlusions]
 
 [Anything else Relevant]
+
+
 ## Networking
 ![Networking Diagram](images/networking_diagram.jpg)
 [A break down of TCP Messaging, how it works and what I wrote using this Library (Credit Dr. Angel Germán Espinosa Coarasa)]
