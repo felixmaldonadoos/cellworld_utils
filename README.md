@@ -4,7 +4,7 @@
 
 ### Project Overview
 [**It Controls a Robot in VR**]
-The purpose of this project is to create a method of controlling a robot through virtual-reality.  
+The purpose of this project is to create a method of controlling a robot through virtual-reality. 
 
 [**Planning Perspective**]
 This is to understand the dynamic between predator and prey for the purpose of understanding planning.
