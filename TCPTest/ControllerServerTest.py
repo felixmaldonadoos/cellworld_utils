@@ -83,25 +83,25 @@ service.on_new_connection = new_connection
 print ("starting")
 service.start(port=6000)
 print ("started")
-sleep(10)
-prey_steps = []
-prey_steps.append(Step(location = Location(0.0, 0.5)) )
-prey_steps.append(Step(location = Location(0.5, 0.5)) )
-prey_steps.append(Step(location = Location(0.5, 1.0)) )
-prey_steps.append(Step(location = Location(0.5, 0.0)) )
-prey_steps.append(Step(location = Location(0.5, 0.5)) )
+# sleep(10)
+# prey_steps = []
+# prey_steps.append(Step(location = Location(0.0, 0.5)) )
+# prey_steps.append(Step(location = Location(0.5, 0.5)) )
+# prey_steps.append(Step(location = Location(0.5, 1.0)) )
+# prey_steps.append(Step(location = Location(0.5, 0.0)) )
+# prey_steps.append(Step(location = Location(0.5, 0.5)) )
 
-predator_steps = []
-predator_steps.append(Step(location = Location(1.0, 0.5)) )
-predator_steps.append(Step(location = Location(0.0, 0.5)) )
-predator_steps.append(Step(location = Location(0.5, 0.0)) )
-predator_steps.append(Step(location = Location(0.5, 1.0)) )
-predator_steps.append(Step(location = Location(1.0, 0.5)) )
+# predator_steps = []
+# predator_steps.append(Step(location = Location(1.0, 0.5)) )
+# predator_steps.append(Step(location = Location(0.0, 0.5)) )
+# predator_steps.append(Step(location = Location(0.5, 0.0)) )
+# predator_steps.append(Step(location = Location(0.5, 1.0)) )
+# predator_steps.append(Step(location = Location(1.0, 0.5)) )
 
-for i in range(0,len(prey_traj)):
-    print(f"Broadcast: {i}")
-    service.send_broadcast_prey(prey_traj[i])
-    service.send_broadcast_pred(pred_traj[i])
-    sleep(0.01)
+# for i in range(0,len(prey_traj)):
+#     print(f"Broadcast: {i}")
+#     service.send_broadcast_prey(prey_traj[i])
+#     service.send_broadcast_pred(pred_traj[i])
+#     sleep(0.01)
     
 service.join()
