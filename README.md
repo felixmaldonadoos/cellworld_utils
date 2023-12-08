@@ -101,3 +101,8 @@ Lastly is the fully assembled Step-Up Module
 
 #### Fully Assembled Step-Up Module
 ![Fully Assembled Module](images/full_assembly.jpg)
+
+### Acknowledgements
+Angel Germán Espinosa Coarasa, Gabrielle Wink, Alex Lai, Chris Angeloni, Felix Alexander Maldonado, Selim Chalyshkan, Joe Reed,  Joshua Chi, and of course Dr. MacIver
+
+Further acknowledgement goes towards the MacIver Lab for several figures, which will be available in, Lai, et al. (2024) . A robot-rodent interaction arena with adjustable spatial complexity for ethologically relevant behavioral studies. Cell Reports
