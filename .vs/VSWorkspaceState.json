@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\TCPTest",
+    "\\venvCWU",
+    "\\venvCWU\\lib",
+    "\\venvCWU\\lib\\python3.10",
+    "\\venvCWU\\lib\\python3.10\\site-packages",
+    "\\venvCWU\\lib\\python3.10\\site-packages\\tcp_messages"
+  ],
+  "SelectedNode": "\\TCPTest\\Client.py",
+  "PreviewInSolutionExplorer": false
+}

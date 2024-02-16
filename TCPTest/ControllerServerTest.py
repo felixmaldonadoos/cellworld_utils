@@ -10,7 +10,7 @@ occlusions = "21_05"
 world = World.get_from_parameters_names('hexagonal', "canonical", occlusions)
 # print(world.cells)
 vr_occlusion_locations = []
-print(len(world.implementation.cell_locations))
+print("# Cell locations: ", len(world.implementation.cell_locations))
 # for cell in world.implementation.cell_locations:
     # if(cell["occluded"]):
     # print(cell)
@@ -21,8 +21,8 @@ traj_obj = epi.trajectories.split_by_agent()
 prey_traj = traj_obj['prey']
 pred_traj = traj_obj['predator']
 # print(prey_traj)
-print(len(prey_traj))
-print(len(pred_traj))
+print("# prey points: ", len(prey_traj))
+print("# pred points: ", len(pred_traj))
 
 # for step in prey_traj:
 #     print(f"Step {step}")
@@ -83,7 +83,7 @@ service.on_new_connection = new_connection
 print ("starting")
 service.start(port=6000)
 print ("started")
-sleep(10)
+sleep(3)
 prey_steps = []
 prey_steps.append(Step(location = Location(0.0, 0.5)) )
 prey_steps.append(Step(location = Location(0.5, 0.5)) )
@@ -97,7 +97,6 @@ prey_steps.append(Step(location = Location(0.5, 0.5)) )
 # predator_steps.append(Step(location = Location(0.5, 0.0)) )
 # predator_steps.append(Step(location = Location(0.5, 1.0)) )
 # predator_steps.append(Step(location = Location(1.0, 0.5)) )
-
 for i in range(0,len(prey_traj)):
     print(f"Broadcast: {i}")
     service.send_broadcast_prey(prey_traj[i])

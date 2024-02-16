@@ -4,6 +4,9 @@
 #venv
 venvCWU/*
 
+# visual studio stuff 
+.vs/
+
 # Compiled Object files
 *.slo
 *.lo
