@@ -81,7 +81,7 @@ service.allow_subscription = True
 
 service.on_new_connection = new_connection
 print ("starting")
-service.start(port=6000)
+service.start(port=6001)
 print ("started")
 sleep(3)
 prey_steps = []
@@ -99,8 +99,8 @@ prey_steps.append(Step(location = Location(0.5, 0.5)) )
 # predator_steps.append(Step(location = Location(1.0, 0.5)) )
 for i in range(0,len(prey_traj)):
     print(f"Broadcast: {i}")
-    service.send_broadcast_prey(prey_traj[i])
-    # service.send_broadcast_pred(pred_traj[i])
+    # service.send_broadcast_prey(prey_traj[i])
+    service.send_broadcast_pred(pred_traj[i])
     sleep(0.01)
     
 service.join()
