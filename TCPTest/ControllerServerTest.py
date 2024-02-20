@@ -82,14 +82,16 @@ service.allow_subscription = True
 service.on_new_connection = new_connection
 print ("starting")
 service.start(port=6001)
-print ("started")
+print ("started service.")
+input("Press any key to start broadcast: ")
+print("Starting broadcast in 3 seconds...")
 sleep(3)
 prey_steps = []
-prey_steps.append(Step(location = Location(0.0, 0.5)) )
-prey_steps.append(Step(location = Location(0.5, 0.5)) )
-prey_steps.append(Step(location = Location(0.5, 1.0)) )
-prey_steps.append(Step(location = Location(0.5, 0.0)) )
-prey_steps.append(Step(location = Location(0.5, 0.5)) )
+# prey_steps.append(Step(location = Location(0.0, 0.5)) )
+# prey_steps.append(Step(location = Location(0.5, 0.5)) )
+# prey_steps.append(Step(location = Location(0.5, 1.0)) )
+# prey_steps.append(Step(location = Location(0.5, 0.0)) )
+# prey_steps.append(Step(location = Location(0.5, 0.5)) )
 
 # predator_steps = []
 # predator_steps.append(Step(location = Location(1.0, 0.5)) )
@@ -97,10 +99,13 @@ prey_steps.append(Step(location = Location(0.5, 0.5)) )
 # predator_steps.append(Step(location = Location(0.5, 0.0)) )
 # predator_steps.append(Step(location = Location(0.5, 1.0)) )
 # predator_steps.append(Step(location = Location(1.0, 0.5)) )
+
+fs_camera = 90; # 90 Hz sampling
+dt = 1/fs_camera; 
 for i in range(0,len(prey_traj)):
     print(f"Broadcast: {i}")
     # service.send_broadcast_prey(prey_traj[i])
     service.send_broadcast_pred(pred_traj[i])
-    sleep(0.01)
-    
+    sleep(dt) # roughly 90 Hz 
+print("\nFinished broadcast. Calling service.join().")
 service.join()
