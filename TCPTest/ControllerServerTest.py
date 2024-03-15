@@ -8,24 +8,15 @@ from time import sleep
 # --- Load an Experiment ---
 occlusions = "21_05"
 world = World.get_from_parameters_names('hexagonal', "canonical", occlusions)
-# print(world.cells)
 vr_occlusion_locations = []
 print("# Cell locations: ", len(world.implementation.cell_locations))
-# for cell in world.implementation.cell_locations:
-    # if(cell["occluded"]):
-    # print(cell)
-    # vr_occlusion_locations.append(cell["location"])
 epi = Episode.load_from_file("PEEK_20230201_1340_FMM13_21_05_RT3_episode_000.json")
-# epi = Episode.load_from_file("PEEK_20230131_1320_FMM13_21_05_RT2_episode_001.json")
 traj_obj = epi.trajectories.split_by_agent()
 prey_traj = traj_obj['prey']
 pred_traj = traj_obj['predator']
-# print(prey_traj)
+
 print("# prey points: ", len(prey_traj))
 print("# pred points: ", len(pred_traj))
-
-# for step in prey_traj:
-#     print(f"Step {step}")
 
 # --- Fake Server ---  
 class MyService(tcp.MessageServer):
@@ -37,6 +28,7 @@ class MyService(tcp.MessageServer):
         self.router.add_route("stop_server", self.stop_service)
         self.router.add_route("set_destination", self.echo, JsonString)
         self.router.add_route("get_world_implementation", self.add_cells)
+        
         # self.router.add_route("send_again", self.send_broadcast)
 
     # @staticmethod
@@ -70,7 +62,8 @@ class MyService(tcp.MessageServer):
                              body=step))
     
     def send_broadcast_pred(self, step):
-        print(f"Sending predator_step {step.location}")
+        # print(f"Sending predator_step {step.location}")
+        print(step)
         service.broadcast_subscribed(message=tcp.Message(header="predator_step", body=step))
 
 def new_connection(self):
@@ -87,18 +80,6 @@ input("Press any key to start broadcast: ")
 print("Starting broadcast in 3 seconds...")
 sleep(3)
 prey_steps = []
-# prey_steps.append(Step(location = Location(0.0, 0.5)) )
-# prey_steps.append(Step(location = Location(0.5, 0.5)) )
-# prey_steps.append(Step(location = Location(0.5, 1.0)) )
-# prey_steps.append(Step(location = Location(0.5, 0.0)) )
-# prey_steps.append(Step(location = Location(0.5, 0.5)) )
-
-# predator_steps = []
-# predator_steps.append(Step(location = Location(1.0, 0.5)) )
-# predator_steps.append(Step(location = Location(0.0, 0.5)) )
-# predator_steps.append(Step(location = Location(0.5, 0.0)) )
-# predator_steps.append(Step(location = Location(0.5, 1.0)) )
-# predator_steps.append(Step(location = Location(1.0, 0.5)) )
 
 fs_camera = 90; # 90 Hz sampling
 dt = 1/fs_camera; 
