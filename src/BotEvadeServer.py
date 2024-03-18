@@ -3,6 +3,7 @@ from cellworld import *
 import socket
 from _thread import start_new_thread
 
+
 class BotEvadeService(MessageServer):
     def __init__(self):
         MessageServer.__init__(self)
@@ -49,8 +50,6 @@ class BotEvadeService(MessageServer):
     def stop_service(self):
         self.stop()
         self.join()
-
- 
 
     def abort(self)->None:
         self.log("[FATAL] Aborting; stopping service.")
