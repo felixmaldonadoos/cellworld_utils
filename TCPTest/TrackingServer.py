@@ -5,24 +5,31 @@ import cellworld as cw
 
 class VRServer():
     def TrackingService(self):
-        ts = ct.TrackingService()
-        ts.ip = "127.0.0.1"
-        ts.start(port=4510)
+        self.ts = ct.TrackingService()
+        self.ts.ip = "127.0.0.1"
+        self.ts.router.add_route("send_step", self.echo) # predator (for now)
+        self.ts.on_new_connection = self.on_connection_ts
+        self.ts.start(port=4510)
+        
         print("[TS] Started ")
 
     def ExperimentService(self):
-        es = ces.ExperimentService()
-        es.set_tracking_service_ip = "127.0.0.1"
-        es.on_new_connection = self.on_connection_es
-        es.start()
-        print("[ES] Started")
-        print("waiting for message..")
-        es.join()
+        self.es = ces.ExperimentService()
+        self.es.set_tracking_service_ip = "127.0.0.1"
+        self.es.on_new_connection = self.on_connection_es
+        self.es.router.add_route("start_episode", self.start_episode, ces.StartEpisodeRequest)
 
-    def on_connection_es(self)->None:
+        self.es.start()
+        print("[ES] Started")
+        self.es.join()
+
+    def echo(self,msg):
+        print(f"Received: {msg}")
+
+    def on_connection_es(self, connection_id)->None:
         print("[ES] New connection!")
 
-    def on_connection_ts(self)->None:
+    def on_connection_ts(self, connection_id)->None:
         print("[TS] New connection!")
         
 def main():
