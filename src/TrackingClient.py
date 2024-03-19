@@ -57,8 +57,8 @@ class ExperimentServiceClient(ces.ExperimentClient):
             return
     
     def run(self)->None:
-        print("run")
         self.pre_start()
+        # todo: start sending steps 
     
     def echo(self,msg)->None:
         print(f"Sent: {msg}")
