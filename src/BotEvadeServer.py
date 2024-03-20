@@ -1,74 +1,65 @@
-from tcp_messages import MessageServer, Message
-from cellworld import *
-import socket
-from _thread import start_new_thread
+import cellworld_experiment_service as ces
+import cellworld_tracking as ct
+import tcp_messages as tm
+import cellworld as cw
 
-
-class BotEvadeService(MessageServer):
-    def __init__(self):
-        MessageServer.__init__(self)
-
-        # constants 
-        self.header_predator = "predator_step"
-        self.header_prey = "prey_step"
-        self.port = 6001
-
-        # "settings"
-        self.allow_subscription = False
-        self.on_new_connection = self.new_connection; 
-        
-        # service control flow 
-        self.router.add_route("status", self.status)
-        self.router.add_route("start_episode", self.start_episode)
-        self.router.add_route("stop_episode",self.stop_episode)
-        self.router.add_route("stop_service", self.stop_service) 
-        
-        # main messages 
-        self.router.add_route(self.header_prey, str) # input 
-        self.router.add_route(self.header_predator, str) # output
-        
-        # error handling 
-        self.bFatalError = False
-        self.bAbortCalled = False
-
-    def log(self, error_type, error_msg):
-        print(f"[{error_type} {error_msg}")
+class BotEvadeServer():
+    def __init__(self) -> None:
+        print("=== BotEvade Server ===")
+        pass
     
-    def run(self):
-        print("self.run()")
-        self.allow_subscription = True
+    # if subscribed, header_step will received the same value back (subs = relay point)
+    # you only need a route from the CLIENT 
 
-    def start_service(self):
-        self.start(self.port)
     
-    def start_episode(self):
-        print("start episode")
-
-    def stop_episode(self):
-        print("stop episode")
+    def TrackingService(self):
+        def send_step(step: ces.Step)->None:
+            print(step.agent_name)
+            # call gabbie script and gabbie.agent_name + _step = pred_step ## not implemented yet
+            # step = self.process_step(step)
+            self.ts.broadcast_subscribed(ces.Message(step.agent_name + "_step", step))
         
-    def stop_service(self):
-        self.stop()
-        self.join()
+        self.ts                     = ct.TrackingService()
+        self.ts.ip                  = "127.0.0.1"
+        self.ts.on_new_connection   = self.on_connection_ts
+        self.ts.send_step           = send_step
+        res                         = self.ts.start(port=4510)
 
-    def abort(self)->None:
-        self.log("[FATAL] Aborting; stopping service.")
-        self.stop_service()
+        print(f"[TS] Started: {res} at port {self.ts.port()}")
+ 
+    def ExperimentService(self):
+        self.es                     = ces.ExperimentService()
+        self.es.on_new_connection   = self.on_connection_es
+        self.es.on_episode_started  = self.on_episode_started_es
 
-    def new_connection(self):
-        print("New connection!") 
-        print(self.connections)
+        self.es.set_tracking_service_ip("127.0.0.1")
+        res = self.es.start()
+        print(f"[ES] Started: {res} at port {self.es.port()}")
+        self.es.join()
 
-    def msg_step(self, header, body) -> Message:
-        return Message(header=self.header, body=body)
-    
-    def send_broadcast_pred(self, step):
-        print(f"Sending predator_step {step.location}")
-        self.broadcast_subscribed(message=self.msg_step(self.header_predator, step))
+
+            
+    def process_step(self, step:ces.Step)->ces.Step:
+        print("processing")
+        step.agent_name = "predator"
+        return step
+    def echo_ts(self,msg)->None:
+        # print(f"Received: {msg}")
+        return None
+
+    def on_episode_started_es(self, msg):
+        print(f"[ES] Episode Started: {msg}")
+
+    def on_connection_es(self, connection_id)->None:
+        print("[ES] New connection!")
+
+    def on_connection_ts(self, connection_id)->None:
+        print("[TS] New connection!")
         
+def main():
+    s = BotEvadeServer()
+    s.TrackingService()
+    s.ExperimentService()
+
 if __name__ == "__main__":
-    server = BotEvadeService(); 
-    server.port = 6001; 
-
-    # allow new connections 
-    server.run(); 
+    main()
