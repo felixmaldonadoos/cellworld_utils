@@ -19,7 +19,6 @@ class BotEvadeServer():
         self.ts.on_new_connection   = self.on_connection_ts
         self.ts.send_step           = send_step
         res                         = self.ts.start(port=4510)
-
         print(f"[TS] Started: {res} at port {self.ts.port()}")
  
     def ExperimentService(self):
@@ -28,31 +27,36 @@ class BotEvadeServer():
         # self.es.router.add_route("start_experiment_vr",self.start_experiment_vr, ces.StartExperimentRequestVR)
         self.es.on_new_connection   = self.on_connection_es
         self.es.on_episode_started  = self.on_episode_started_es
-        self.es.on_experiment_started = self.on_experiment_started_es
+
         self.es.set_tracking_service_ip("127.0.0.1")
         res = self.es.start()
         print(f"[ES] Started: {res} at port {self.es.port()}")
         self.es.join()
+
             
     def process_step(self, step:ces.Step)->ces.Step:
-        print("process_step")
+        print("processing")
         step.agent_name = "predator"
         return step
     def echo_ts(self,msg)->None:
         # print(f"Received: {msg}")
         return None
-    def on_experiment_started_es(self,msg):
-        print(f"[ES] Experiment started: {msg}")
 
     def on_episode_started_es(self, msg):
         print(f"[ES] Episode Started: {msg}")
 
     def on_connection_es(self, connection_id)->None:
-        print(f"[ES] New connection! {connection_id}")
+        print("[ES] New connection!")
 
     def on_connection_ts(self, connection_id)->None:
-        print(f"[TS] New connection! {connection_id}")
-        
+        print("[TS] New connection!")
+    
+
+class ExperimentServiceVR(ces.ExperimentService()):
+    def __init__(self)->None:
+        pass
+
+
 def main():
     s = BotEvadeServer()
     s.TrackingService()
