@@ -1,9 +1,6 @@
 # Prerequisites
 *.d
 
-#venv
-venvCWU/*
-
 # visual studio stuff 
 .vs/
 
