@@ -31,22 +31,26 @@ class TrackingServiceClient(tcp.MessageClient):
 class ExperimentServiceClient(ces.ExperimentClient):
     def __init__(self):
         super().__init__()
-        self.set_request_time_out(100)
+        
+        # self.set_request_time_out(100)
         self.router.add_route("predator_step",self.echo, JsonString)
         self.on_episode_started = self.on_episode_started_es
-        print(f"[ES] Port: {self.port}")
+        self.port = 4540
 
     def on_episode_started_es(self, msg:ces.EpisodeStartedMessage):
             print(f"[ES] Episode Started: {msg}")
 
     def pre_start(self)->None:
         res = self.connect("127.0.0.1")
-        print(f"[ES] connection ")
-        response_start_experiment = self.start_experiment(suffix="test",prefix="test",world_configuration="hexagonal",world_implementation="canonical",
+        print(f"[ES] connected")
+        try:
+            response_start_experiment = self.start_experiment(suffix="test",prefix="test",world_configuration="hexagonal",world_implementation="canonical",
                         occlusions="21_05", subject_name="alexander",duration=100,
                         rewards_cells=None,rewards_orientations=None)
-
-        print(f"[ES] Start experiment response: {response_start_experiment}")
+            print(f"[ES] Start experiment response: {response_start_experiment}")
+        except TimeoutError:
+            print("[ES] Timed out")
+            return
 
         try:
             response_start_episode = self.start_episode(experiment_name=response_start_experiment.experiment_name,

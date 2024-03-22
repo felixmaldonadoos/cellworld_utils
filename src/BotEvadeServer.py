@@ -7,11 +7,6 @@ class BotEvadeServer():
     def __init__(self) -> None:
         print("=== BotEvade Server ===")
         pass
-    
-    # if subscribed, header_step will received the same value back (subs = relay point)
-    # you only need a route from the CLIENT 
-
-    
     def TrackingService(self):
         def send_step(step: ces.Step)->None:
             print(step.agent_name)
@@ -28,7 +23,9 @@ class BotEvadeServer():
         print(f"[TS] Started: {res} at port {self.ts.port()}")
  
     def ExperimentService(self):
+    
         self.es                     = ces.ExperimentService()
+        # self.es.router.add_route("start_experiment_vr",self.start_experiment_vr, ces.StartExperimentRequestVR)
         self.es.on_new_connection   = self.on_connection_es
         self.es.on_episode_started  = self.on_episode_started_es
 
@@ -36,7 +33,6 @@ class BotEvadeServer():
         res = self.es.start()
         print(f"[ES] Started: {res} at port {self.es.port()}")
         self.es.join()
-
 
             
     def process_step(self, step:ces.Step)->ces.Step:
