@@ -41,6 +41,7 @@ class Server:
 class ServerTrackingService(ct.TrackingService):
     def __init__(self) -> None:
         ct.TrackingService.__init__(self)
+        # super().__init__(self)
         self.ip                  = "127.0.0.1"
         self.on_new_connection   = self.on_connection_ts
         self.send_step           = self.send_step_ts
