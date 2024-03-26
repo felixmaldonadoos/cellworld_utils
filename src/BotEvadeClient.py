@@ -11,18 +11,11 @@ class TrackingServiceClient(tcp.MessageClient):
         self.router.add_route("send_step", self.echo, JsonString)
         self.port = 4510
         self.ip = "127.0.0.1"
-        self.b_send_message = False; 
     def run(self):
         if self.connect("127.0.0.1", 4510):
             print("[TS] connected")
             if self.subscribe():
                 print("[TS] Subscribed!")
-            # if (self.b_send_message):
-            #     while True:
-            #         self.send_message(tcp.Message(
-            #                 header="send_step",
-            #                 body=Step()))
-            #         sleep(0.1)
         else:
             print("[TS] failed to connect")
     def echo(self,msg):
@@ -34,6 +27,9 @@ class ExperimentServiceClient(ces.ExperimentClient):
         self.router.add_route("predator_step",self.echo, JsonString)
         self.on_episode_started = self.on_episode_started_es
         self.port = 4540
+
+    def send_get_experiment(self, experiment_name: str) -> ces.GetExperimentResponse:
+        return self.get_experiment(experiment_name)
 
     def on_episode_started_es(self, msg:ces.EpisodeStartedMessage):
         print(f"[ES] Episode Started: {msg}")
@@ -63,12 +59,16 @@ class ExperimentServiceClient(ces.ExperimentClient):
     def stop(self)->None:
         print("stop")
         print(self.finish_episode())
-        print("stop exp")
+        print("stop exp. getting experiment")
+        get_experiment_response = self.get_experiment(self.response_start_experiment.experiment_name)
+        print(get_experiment_response)
+        print("after get exp resp")
+        time.sleep(2)
         print(self.finish_experiment(self.response_start_experiment.experiment_name))
 
     def echo(self,msg)->None:
         print(f"Sent: {msg}")
-
+    
 # run tracking service
 TrackingServiceClient().run()
 

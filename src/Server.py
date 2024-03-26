@@ -44,7 +44,7 @@ class ServerTrackingService(ct.TrackingService):
         # super().__init__(self)
         self.ip                  = "127.0.0.1"
         self.on_new_connection   = self.on_connection_ts
-        self.send_step           = self.send_step_ts
+        # self.send_step           = self.send_step_ts # ask german how to override a method
         
     def run(self)->bool:
         # print('here')
@@ -59,16 +59,18 @@ class ServerTrackingService(ct.TrackingService):
     def on_connection_ts(self,msg)->None:
         self.log("New connection.",msg)
     
-    def process_step(self, step:ces.Step)->ces.Step:
-        # print("processing")
+    def process_step(self, step:ces.Step)->ces.Step: # not being called but i get a message back? 
+        print("processing")
+        step = ces.Step()
         step.agent_name = "predator"
         return step
 
     def send_step_ts(self,step:ces.Step=None)->None:
-        print(step.agent_name)
+        self.log("received from:",step.agent_name)
         # call gabbie script and gabbie.agent_name + _step = pred_step ## not implemented yet
         step = self.process_step(step)
         self.ts.broadcast_subscribed(ces.Message(step.agent_name + "_step", step))
+        print("after")
         return
     
     def log(self, msg, *args):
@@ -105,7 +107,10 @@ class ServerExperimentService(ces.ExperimentService):
 
     def on_episode_started_es(self,msg:ces.StartEpisodeRequest = None)->None:
         self.log("episode started",msg)
-    
+      
+    def on_episode_finished_es(self,msg:bool = None)->None:
+        self.log("Episode finished.", msg)
+
     def on_experiment_started_es(self,msg:ces.StartExperimentResponse = None)->None:
         self.log("Experiment started.",f"experiment name: {msg.experiment_name}")
     
@@ -116,17 +121,18 @@ class ServerExperimentService(ces.ExperimentService):
 
     def on_experiment_finished_es(self,msg:bool = None)->None:
         self.log("Experiment finished.",msg)
-
-    def on_episode_finished_es(self,msg:bool = None)->None:
-        self.log("Episode finished.", msg)
-
+  
     def log(self, msg, *args):
         additional_info = ', '.join(str(arg) for arg in args)
         if additional_info:
             print(f"[ES] {msg}. Info: {additional_info}")
         else:
             print(f"[ES] {msg}.")
-       
+
+# as steps come in, append to traj JsonList and then save as trejectory into episode file. 
+# output: 1 trajlist, Experiment(Json):Episode_N:Trajectory
+# go to experiment.py -> line 28
+            
 
 def main():
     s = Server()
