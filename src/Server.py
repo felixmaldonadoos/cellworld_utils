@@ -11,7 +11,9 @@ class Server:
         print("=== BotEvade Server ===")
         self.tracking_service   = ServerTrackingService()
         self.experiment_service = ServerExperimentService()
-        
+        self.experiment_service.get_trajectory = self.tracking_service.get_trajectory
+        self.tracking_service.__process_step__ = self.experiment_service.__process_step__
+
     def start(self)->bool:
         if not self.tracking_service.run():
             self.log("ERROR! Failed to start Tracking Service.")
@@ -44,7 +46,9 @@ class ServerTrackingService(ct.TrackingService):
         # super().__init__(self)
         self.ip                  = "127.0.0.1"
         self.on_new_connection   = self.on_connection_ts
-        # self.send_step           = self.send_step_ts # ask german how to override a method
+        self.router.add_route("send_step_vr",self.send_step_ts,ces.Step)
+        self.current_trajectory = None
+        self.__process_step__   = None
         
     def run(self)->bool:
         # print('here')
@@ -56,21 +60,38 @@ class ServerTrackingService(ct.TrackingService):
             self.log("lol server is still refreshing")
         return res
 
+    def get_trajectory(self)->ces.Trajectories:
+        self.log("get trajectory")
+        trajectory = self.current_trajectory
+        self.current_trajectory = None
+        # self.log(trajectory)
+        return trajectory
+
     def on_connection_ts(self,msg)->None:
         self.log("New connection.",msg)
     
+    def process_to_json_list(self,step:ces.Step = None)->None:
+        if step is None: 
+            return
+        self.trajectories
+        return None
+    
     def process_step(self, step:ces.Step)->ces.Step: # not being called but i get a message back? 
-        print("processing")
+        # print(step)
+        if self.current_trajectory is None:
+            self.current_trajectory = ces.Trajectories()
+        if step is not None: self.current_trajectory.append(step)
+        else: self.log("step none")
+        
+        if self.current_trajectory is None: self.log("current trajectory is none")
+        self.__process_step__(step)
         step = ces.Step()
         step.agent_name = "predator"
         return step
 
-    def send_step_ts(self,step:ces.Step=None)->None:
-        self.log("received from:",step.agent_name)
-        # call gabbie script and gabbie.agent_name + _step = pred_step ## not implemented yet
+    def send_step_ts(self,step:ces.Step = None):
         step = self.process_step(step)
         self.ts.broadcast_subscribed(ces.Message(step.agent_name + "_step", step))
-        print("after")
         return
     
     def log(self, msg, *args):
@@ -91,17 +112,34 @@ class ServerExperimentService(ces.ExperimentService):
         self.on_experiment_finished = self.on_experiment_finished_es
         self.on_episode_started     = self.on_episode_started_es
         self.on_episode_finished    = self.on_episode_finished_es
-        self.on_experiment_resumed  = self.on_experiment_resumed_es        
+        self.on_experiment_resumed  = self.on_experiment_resumed_es  
+        # self.on_step                = self.on_step_ts 
         self.set_tracking_service_ip("127.0.0.1")
+        self.current_trajectory = None
+        self.get_trajectory = None # tell TS to send us trajectory for this episode 
         pass
 
     def run(self)->bool:
         res = self.start()
         self.log(f"Started server", res)
         self.join()
-        print('after run ') ## never fires 
         return res
+    
+    def _call_tracking_service_(self):
+        return
 
+    def save_trajectories_to_log(self,trajectories:ces.Trajectories=None)->bool:
+        if self.episode_in_progress:
+            return False
+        return True
+    
+    # def on_step(self,step:ces.Step=None)->None:
+    #     self.los("on_step_ts")
+    #     if step is not None: 
+    #         self.__process_step__(step=step)
+    #     else:
+    #         self.log("none")
+    
     def on_new_connection_es(self,msg:tcp.Connection = None)->None:
         self.log("New connection", msg.state)
 
@@ -110,6 +148,9 @@ class ServerExperimentService(ces.ExperimentService):
       
     def on_episode_finished_es(self,msg:bool = None)->None:
         self.log("Episode finished.", msg)
+        if self.get_trajectory is not None: 
+            self.active_episode.trajectories = self.get_trajectory() 
+            self.log(self.active_episode)
 
     def on_experiment_started_es(self,msg:ces.StartExperimentResponse = None)->None:
         self.log("Experiment started.",f"experiment name: {msg.experiment_name}")
