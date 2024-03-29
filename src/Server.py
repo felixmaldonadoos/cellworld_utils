@@ -107,17 +107,26 @@ class ServerTrackingService(ct.TrackingService):
 class ServerExperimentService(ces.ExperimentService):
     def __init__(self):
         super().__init__()
+        self.world = cw.World.get_from_parameters_names("hexagonal", "canonical")
         self.on_new_connection      = self.on_new_connection_es
         self.on_experiment_started  = self.on_experiment_started_es
         self.on_experiment_finished = self.on_experiment_finished_es
         self.on_episode_started     = self.on_episode_started_es
         self.on_episode_finished    = self.on_episode_finished_es
         self.on_experiment_resumed  = self.on_experiment_resumed_es  
+        self.router.add_route("get_cells_locations", self.get_cells_locations)
+        self.router.add_route("get_occlusions", self.get_occlusions, str)
         # self.on_step                = self.on_step_ts 
         self.set_tracking_service_ip("127.0.0.1")
         self.current_trajectory = None
         self.get_trajectory = None # tell TS to send us trajectory for this episode 
         pass
+
+    def get_cell_locations(self, m=None) -> cw.Location_list:
+        return cw.Location_list([c.location for c in self.world.cells])
+    
+    def get_occlusions(self, occlusions_name) -> cw.Cell_group_builder:
+        return cw.Cell_group_builder.get_from_name("hexagonal", occlusions_name, "occlusions")
 
     def run(self)->bool:
         res = self.start()
