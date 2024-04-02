@@ -46,7 +46,7 @@ class ServerTrackingService(ct.TrackingService):
         # super().__init__(self)
         self.ip                  = "127.0.0.1"
         self.on_new_connection   = self.on_connection_ts
-        self.router.add_route("send_step_vr",self.send_step_ts,ces.Step)
+        self.router.add_route("send_step",self.send_step_ts,ces.Step)
         self.current_trajectory = None
         self.__process_step__   = None
         
@@ -115,17 +115,18 @@ class ServerExperimentService(ces.ExperimentService):
         self.on_episode_finished    = self.on_episode_finished_es
         self.on_experiment_resumed  = self.on_experiment_resumed_es  
         self.router.add_route("get_cells_locations", self.get_cells_locations)
-        self.router.add_route("get_occlusions", self.get_occlusions, str)
+        self.router.add_route("get_occlusions", self.get_occlusions, str) 
         # self.on_step                = self.on_step_ts 
         self.set_tracking_service_ip("127.0.0.1")
         self.current_trajectory = None
         self.get_trajectory = None # tell TS to send us trajectory for this episode 
         pass
 
-    def get_cell_locations(self, m=None) -> cw.Location_list:
+    def get_cells_locations(self, m=None) -> cw.Location_list:
         return cw.Location_list([c.location for c in self.world.cells])
     
     def get_occlusions(self, occlusions_name) -> cw.Cell_group_builder:
+        self.log("received get_occlusions:", occlusions_name)
         return cw.Cell_group_builder.get_from_name("hexagonal", occlusions_name, "occlusions")
 
     def run(self)->bool:
@@ -141,13 +142,6 @@ class ServerExperimentService(ces.ExperimentService):
         if self.episode_in_progress:
             return False
         return True
-    
-    # def on_step(self,step:ces.Step=None)->None:
-    #     self.los("on_step_ts")
-    #     if step is not None: 
-    #         self.__process_step__(step=step)
-    #     else:
-    #         self.log("none")
     
     def on_new_connection_es(self,msg:tcp.Connection = None)->None:
         self.log("New connection", msg.state)
