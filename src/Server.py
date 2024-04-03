@@ -5,19 +5,29 @@ import cellworld as cw
 import sys
 import json
 import errno
+import os
 
 class Server:
     def __init__(self) -> None:
         print("=== BotEvade Server ===")
+        self.logs_folder = "../logs/"
         self.tracking_service   = ServerTrackingService()
         self.experiment_service = ServerExperimentService()
         self.experiment_service.get_trajectory = self.tracking_service.get_trajectory
         self.tracking_service.__process_step__ = self.experiment_service.__process_step__
 
     def start(self)->bool:
+        if self.verify_logs_folder() is not True: 
+            self.create_logs_folder()
+
+        # check again to make sure 
+        if self.verify_logs_folder() is not True: 
+            self.log("Failed to create and find logs folder found.")
+
         if not self.tracking_service.run():
             self.log("ERROR! Failed to start Tracking Service.")
             return False
+        
         if not self.experiment_service.run():
             self.log("ERROR! Failed to start Experiment Service.")
             return False
@@ -32,6 +42,17 @@ class Server:
     def exit(self)->None:
         self.log("Exiting program")
         sys.exit()
+
+    def create_logs_folder(self)->None:
+        self.log("Creating logs directory.")
+        os.mkdir(self.logs_folder)
+
+    def verify_logs_folder(self)->bool: 
+        if os.path.exists(self.logs_folder) and os.path.isdir(self.logs_folder):
+            self.log("Successfully found logs directory.")
+            return True
+        self.log("Failed to find logs directory.")
+        return False
 
     def log(self, msg, *args):
         additional_info = ', '.join(str(arg) for arg in args)
