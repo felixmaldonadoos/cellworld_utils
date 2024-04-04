@@ -1,3 +1,0 @@
-/mnt/c/Users/maciv/CLionProjects/TCPTest/cmake-build-debug/CMakeFiles/TCPTest.dir
-/mnt/c/Users/maciv/CLionProjects/TCPTest/cmake-build-debug/CMakeFiles/edit_cache.dir
-/mnt/c/Users/maciv/CLionProjects/TCPTest/cmake-build-debug/CMakeFiles/rebuild_cache.dir
