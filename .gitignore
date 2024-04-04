@@ -1,3 +1,6 @@
+# logs 
+logs/*.json
+
 # Prerequisites
 *.d
 
